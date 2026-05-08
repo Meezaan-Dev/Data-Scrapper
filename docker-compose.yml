@@ -1,26 +1,33 @@
+name: frontend-rss-hub
+
 services:
   api:
     build:
       context: ./scraper-api
-    container_name: frontend-rss-api
     environment:
       ADDR: ":8080"
       CONFIG_PATH: /root/config.json
       DB_PATH: /root/data/resources.db
+      INITIAL_SCRAPE: "true"
     ports:
       - "8080:8080"
     volumes:
       - scraper-data:/root/data
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/api/resources"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
     restart: unless-stopped
 
   frontend:
     build:
       context: ./frontend
-    container_name: frontend-rss-viewer
     environment:
       NEXT_PUBLIC_API_URL: http://api:8080
     depends_on:
-      - api
+      api:
+        condition: service_healthy
     ports:
       - "3000:3000"
     restart: unless-stopped
