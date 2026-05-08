@@ -1,0 +1,12 @@
+frontend/.next/
+frontend/node_modules/
+frontend/out/
+
+scraper-api/data/*.db
+scraper-api/data/*.db-*
+scraper-api/scraper-api
+
+.env
+.env.local
+
+.DS_Store

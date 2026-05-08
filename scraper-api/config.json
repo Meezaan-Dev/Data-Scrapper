@@ -1,0 +1,32 @@
+[
+  {
+    "name": "React",
+    "url": "https://react.dev/feed.xml",
+    "tag": "react"
+  },
+  {
+    "name": "Next.js",
+    "url": "https://nextjs.org/feed.xml",
+    "tag": "nextjs"
+  },
+  {
+    "name": "Vercel",
+    "url": "https://vercel.com/atom",
+    "tag": "vercel"
+  },
+  {
+    "name": "React Releases",
+    "url": "https://github.com/facebook/react/releases.atom",
+    "tag": "react"
+  },
+  {
+    "name": "OpenAI",
+    "url": "https://openai.com/blog/rss.xml",
+    "tag": "ai"
+  },
+  {
+    "name": "GitHub Changelog",
+    "url": "https://github.blog/changelog/feed/",
+    "tag": "tools"
+  }
+]

@@ -1,0 +1,29 @@
+services:
+  api:
+    build:
+      context: ./scraper-api
+    container_name: frontend-rss-api
+    environment:
+      ADDR: ":8080"
+      CONFIG_PATH: /root/config.json
+      DB_PATH: /root/data/resources.db
+    ports:
+      - "8080:8080"
+    volumes:
+      - scraper-data:/root/data
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend-rss-viewer
+    environment:
+      NEXT_PUBLIC_API_URL: http://api:8080
+    depends_on:
+      - api
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+volumes:
+  scraper-data:
