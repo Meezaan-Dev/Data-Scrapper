@@ -9,26 +9,26 @@ The project is designed so a teammate can clone it and run one command on macOS,
 From this directory:
 
 ```bash
-docker compose up --build
+make sandbox
 ```
 
-That command builds and runs both services, creates the SQLite volume, and performs an initial scrape the first time the database is empty.
+That command checks Docker, gives platform-specific setup help when Docker is not ready, builds and runs both services, creates the SQLite volume, and performs an initial scrape the first time the database is empty.
 
 Open:
 
 - Frontend: http://localhost:3000
 - API: http://localhost:8080/api/resources
 
-To run in the background instead:
+If you do not have `make`, run Docker Compose directly:
 
 ```bash
-docker compose up --build -d
+docker compose up --build
 ```
 
 Watch logs:
 
 ```bash
-docker compose logs -f
+make logs
 ```
 
 Trigger a manual scrape:
@@ -39,19 +39,29 @@ curl -X POST http://localhost:8080/scrape
 
 SQLite data is stored in the Docker volume `frontend-rss-hub_scraper-data`, so it survives container restarts without writing database files into your working tree.
 
-## One-Command Helpers
+## First-Time Runtime Setup
 
-On macOS/Linux with `make` available:
+This repository intentionally does not require Go, Node, npm, SQLite, or cron on the host. Those live inside containers.
 
-```bash
-make sandbox
-```
+A container runtime itself still has to exist on the host because no repository can start a VM/container engine from nothing on every operating system.
 
-On Windows PowerShell, use Docker Compose directly:
+Recommended setup by environment:
 
-```powershell
-docker compose up --build
-```
+- macOS: Docker Desktop, or run `make install-sandbox-runtime` to install Colima with Homebrew.
+- Windows PowerShell: Docker Desktop, then `docker compose up --build`.
+- WSL: Docker Desktop on Windows with WSL integration enabled.
+- Linux: Docker Engine plus the Docker Compose plugin.
+
+### WSL
+
+For WSL, use Docker Desktop from Windows:
+
+1. Install and open Docker Desktop on Windows.
+2. Go to Settings > Resources > WSL Integration.
+3. Enable integration for your distro.
+4. In WSL, run `make sandbox`.
+
+If Docker Desktop is installed but closed, `make sandbox` will try to start it from WSL and wait for Docker to become available.
 
 ## Stop Or Reset
 
@@ -78,16 +88,6 @@ Or:
 ```bash
 make reset
 ```
-
-## Host Requirement
-
-This repository intentionally does not require Go, Node, npm, SQLite, or cron on the host. Those live inside containers.
-
-A container runtime itself still has to exist on the host because no repository can start a sandbox VM/container engine from nothing on every operating system. Install one of:
-
-- Docker Desktop for macOS, Windows, or Linux
-- Colima plus Docker CLI on macOS
-- Docker Engine plus Docker Compose on Linux
 
 ## Services
 
