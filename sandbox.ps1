@@ -1,6 +1,7 @@
 $ErrorActionPreference = "Stop"
 
 function Test-DockerReady {
+  # `docker --version` can work before the daemon is ready; docker info proves it.
   docker info *> $null
   return $LASTEXITCODE -eq 0
 }
@@ -20,6 +21,7 @@ function Wait-DockerReady {
 }
 
 function Start-DockerDesktop {
+  # Docker Desktop's install location varies a little across Windows setups.
   $paths = @(
     "$Env:ProgramFiles\Docker\Docker\Docker Desktop.exe",
     "${Env:ProgramFiles(x86)}\Docker\Docker\Docker Desktop.exe",

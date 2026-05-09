@@ -29,6 +29,7 @@ CREATE INDEX IF NOT EXISTS idx_resources_tag_published_at ON resources(tag, publ
 CREATE INDEX IF NOT EXISTS idx_resources_published_at ON resources(published_at DESC);
 `
 
+// Store wraps SQLite access so handlers and scrapers do not need SQL details.
 type Store struct {
 	db *sql.DB
 }
@@ -48,6 +49,8 @@ func Open(path string) (*Store, error) {
 		return nil, fmt.Errorf("open sqlite database: %w", err)
 	}
 
+	// SQLite handles concurrent readers well, but a single writer is simpler and
+	// avoids "database is locked" surprises for this small local app.
 	conn.SetMaxOpenConns(1)
 
 	store := &Store{db: conn}
@@ -82,6 +85,8 @@ func (s *Store) UpsertResource(resource models.Resource) error {
 		resource.CreatedAt = time.Now().UTC()
 	}
 
+	// Link is the natural feed item identity across runs. Updating on conflict
+	// keeps titles/summaries fresh without duplicating old resources.
 	_, err := s.db.Exec(`
 		INSERT INTO resources (title, link, summary, published_at, source_name, tag, created_at)
 		VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -104,6 +109,7 @@ func (s *Store) ListResources(query ResourceQuery) ([]models.Resource, error) {
 	if limit <= 0 {
 		limit = 20
 	}
+	// Keep accidental huge reads from making the local UI or API sluggish.
 	if limit > 100 {
 		limit = 100
 	}
@@ -134,6 +140,7 @@ func (s *Store) ListResources(query ResourceQuery) ([]models.Resource, error) {
 	}
 	defer rows.Close()
 
+	// Return [] instead of null in JSON when there are no rows.
 	resources := []models.Resource{}
 	for rows.Next() {
 		var resource models.Resource

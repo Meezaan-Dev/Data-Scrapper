@@ -23,6 +23,7 @@ export async function fetchResources(tag?: string, limit?: number): Promise<Reso
   const query = params.toString();
   const url = `${API_BASE_URL}/api/resources${query ? `?${query}` : ""}`;
 
+  // Server-rendered pages should always show the latest local SQLite contents.
   const res = await fetch(url, { cache: "no-store" });
 
   if (!res.ok) {

@@ -34,6 +34,7 @@ func (s *Scraper) Scrape(ctx context.Context, feeds []FeedConfig) (int, error) {
 	for _, feed := range feeds {
 		count, err := s.scrapeFeed(ctx, feed)
 		if err != nil {
+			// A single broken feed should not block the rest of the weekly read list.
 			log.Printf("scrape feed %q failed: %v", feed.Name, err)
 			continue
 		}
@@ -51,6 +52,7 @@ func (s *Scraper) scrapeFeed(ctx context.Context, feed FeedConfig) (int, error) 
 
 	count := 0
 	for _, item := range parsedFeed.Items {
+		// Skip malformed feed entries; link/title are the minimum useful card data.
 		if item == nil || item.Link == "" || item.Title == "" {
 			continue
 		}
@@ -80,6 +82,7 @@ func (s *Scraper) scrapeFeed(ctx context.Context, feed FeedConfig) (int, error) 
 }
 
 func summaryFor(item *gofeed.Item) string {
+	// Prefer RSS descriptions because they are usually shorter snippets than content.
 	if strings.TrimSpace(item.Description) != "" {
 		return strings.TrimSpace(item.Description)
 	}

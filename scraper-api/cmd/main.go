@@ -30,6 +30,8 @@ func main() {
 	configPath := envOrDefault("CONFIG_PATH", defaultConfigPath)
 	dbPath := envOrDefault("DB_PATH", defaultDBPath)
 
+	// The same binary runs both the long-lived API and one-off scrape jobs.
+	// This keeps Docker cron simple: it can call `scraper-api scrape`.
 	switch os.Args[1] {
 	case "serve":
 		if err := serve(dbPath, configPath); err != nil {
@@ -46,6 +48,7 @@ func main() {
 }
 
 func serve(dbPath, configPath string) error {
+	// Opening the store also creates the schema if this is a fresh SQLite file.
 	store, err := db.Open(dbPath)
 	if err != nil {
 		return err
@@ -69,6 +72,7 @@ func serve(dbPath, configPath string) error {
 }
 
 func runScrape(dbPath, configPath string) error {
+	// The CLI scrape path uses the same scraper/store code as POST /scrape.
 	store, err := db.Open(dbPath)
 	if err != nil {
 		return err
@@ -94,6 +98,7 @@ func runScrape(dbPath, configPath string) error {
 
 func cors(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Local-first app: allow the Next.js viewer to call the API from localhost.
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")

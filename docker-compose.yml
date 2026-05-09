@@ -1,6 +1,7 @@
 name: frontend-rss-hub
 
 services:
+  # Go API, scraper, cron, and SQLite all live in this container.
   api:
     build:
       context: ./scraper-api
@@ -12,14 +13,17 @@ services:
     ports:
       - "8080:8080"
     volumes:
+      # Named volume keeps the database persistent without writing DB files into git.
       - scraper-data:/root/data
     healthcheck:
+      # The frontend waits for this so first startup is less race-prone.
       test: ["CMD", "wget", "-qO-", "http://localhost:8080/api/resources"]
       interval: 10s
       timeout: 5s
       retries: 12
     restart: unless-stopped
 
+  # Next.js reads from the API through Docker's internal service DNS name: api.
   frontend:
     build:
       context: ./frontend

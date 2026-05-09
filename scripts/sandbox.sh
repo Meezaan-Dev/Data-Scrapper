@@ -5,6 +5,7 @@ wait_for_docker() {
   seconds="${1:-90}"
   i=0
 
+  # Docker Desktop/Colima can take a while to expose the daemon after launching.
   while [ "$i" -lt "$seconds" ]; do
     if docker info >/dev/null 2>&1; then
       return 0
@@ -17,6 +18,7 @@ wait_for_docker() {
 }
 
 is_wsl() {
+  # WSL reports Microsoft in kernel metadata; use both files for broad distro support.
   if [ -r /proc/sys/kernel/osrelease ] && grep -qi microsoft /proc/sys/kernel/osrelease; then
     return 0
   fi
@@ -85,6 +87,7 @@ try_start_docker() {
   fi
 
   if is_wsl && command -v powershell.exe >/dev/null 2>&1; then
+    # In WSL, Docker usually runs in Windows via Docker Desktop, not inside Linux.
     echo "Detected WSL. Trying to start Docker Desktop on Windows..."
     powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "\$p='C:\Program Files\Docker\Docker\Docker Desktop.exe'; if (Test-Path \$p) { Start-Process -FilePath \$p; exit 0 } else { exit 1 }" >/dev/null 2>&1 || true
 
@@ -119,6 +122,7 @@ EOF
   fi
 
   if [ "$(uname -s)" = "Linux" ] && command -v systemctl >/dev/null 2>&1; then
+    # Native Linux can often start the daemon directly. sudo may prompt the user.
     echo "Docker is installed but not running. Trying to start Docker..."
     if systemctl start docker >/dev/null 2>&1 || sudo systemctl start docker; then
       wait_for_docker 30 && return 0
@@ -160,6 +164,8 @@ fi
 
 try_start_docker
 
+# Compose is the sandbox boundary: Go, Node, SQLite, cron, and app processes all
+# run in containers after this point.
 docker compose up --build -d
 
 cat <<'EOF'
