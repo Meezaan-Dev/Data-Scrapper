@@ -17,6 +17,8 @@ const formatter = new Intl.DateTimeFormat("en", {
   year: "numeric",
 });
 
+// Feed entries can arrive as RSS, Atom, or GitHub release HTML. The card keeps
+// display logic small so the backend can store source content without polishing it.
 export function ResourceCard({ resource }: { resource: Resource }) {
   const publishedDate = formatter.format(new Date(resource.published_at));
   const summary = stripHTML(resource.summary);
@@ -66,12 +68,14 @@ export function ResourceCard({ resource }: { resource: Resource }) {
 }
 
 function stripHTML(value: string) {
+  // Most summaries are short HTML fragments; plain text is easier to scan in cards.
   return value.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
 }
 
 function faviconURL(link: string) {
   try {
     const url = new URL(link);
+    // Favicons give each source a quick visual signal without maintaining assets.
     return `https://www.google.com/s2/favicons?domain=${url.hostname}&sz=64`;
   } catch {
     return "https://www.google.com/s2/favicons?domain=localhost&sz=64";

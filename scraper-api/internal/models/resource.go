@@ -2,6 +2,7 @@ package models
 
 import "time"
 
+// Resource is the single API/storage shape for a scraped feed item.
 type Resource struct {
 	ID          int64     `json:"id"`
 	Title       string    `json:"title"`

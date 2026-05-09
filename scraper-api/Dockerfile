@@ -2,6 +2,7 @@ FROM golang:alpine AS builder
 
 WORKDIR /app
 
+# mattn/go-sqlite3 uses CGO, so the builder needs a C toolchain.
 RUN apk --no-cache add build-base
 
 COPY go.mod go.sum ./
@@ -12,6 +13,7 @@ RUN CGO_ENABLED=1 go build -o scraper-api ./cmd/main.go
 
 FROM alpine:latest
 
+# BusyBox provides crond; sqlite is used by entrypoint.sh for the first-run count.
 RUN apk --no-cache add ca-certificates sqlite
 
 WORKDIR /root/

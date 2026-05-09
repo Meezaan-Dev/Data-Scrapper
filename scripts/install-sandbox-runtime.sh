@@ -2,6 +2,8 @@
 set -eu
 
 is_wsl() {
+  # WSL should connect to Docker Desktop from Windows instead of installing a
+  # separate Docker daemon inside the distro.
   if [ -r /proc/sys/kernel/osrelease ] && grep -qi microsoft /proc/sys/kernel/osrelease; then
     return 0
   fi
@@ -49,6 +51,7 @@ EOF
     DOCKER_CONFIG="${DOCKER_CONFIG:-$HOME/.docker}"
     mkdir -p "$DOCKER_CONFIG/cli-plugins"
 
+    # Homebrew installs Compose/Buildx outside Docker's default plugin folder.
     if [ -x /opt/homebrew/opt/docker-compose/bin/docker-compose ]; then
       ln -sf /opt/homebrew/opt/docker-compose/bin/docker-compose "$DOCKER_CONFIG/cli-plugins/docker-compose"
     elif [ -x /usr/local/opt/docker-compose/bin/docker-compose ]; then

@@ -50,6 +50,7 @@ func (h *Handler) Scrape(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Manual scrapes are bounded so a slow feed cannot hang the request forever.
 	ctx, cancel := context.WithTimeout(r.Context(), 2*time.Minute)
 	defer cancel()
 
@@ -75,6 +76,7 @@ func parseLimit(value string) (int, error) {
 	if err != nil || limit < 1 {
 		return 0, strconv.ErrSyntax
 	}
+	// Match the store-level cap and keep the API predictable for UI callers.
 	if limit > 100 {
 		return 100, nil
 	}

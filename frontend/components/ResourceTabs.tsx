@@ -11,6 +11,7 @@ const tabs = [
   { label: "npm/tools", href: "/resources/tools", tag: "tools" },
 ];
 
+// These tags intentionally mirror scraper-api/config.json.
 export function ResourceTabs({ activeTag }: { activeTag?: string }) {
   return (
     <nav
