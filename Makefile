@@ -3,7 +3,7 @@
 SHELL := /bin/sh
 
 sandbox:
-	./scripts/sandbox.sh
+	./sandbox
 
 install-sandbox-runtime:
 	./scripts/install-sandbox-runtime.sh
