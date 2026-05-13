@@ -44,6 +44,38 @@ func (s *Scraper) Scrape(ctx context.Context, feeds []FeedConfig) (int, error) {
 	return total, nil
 }
 
+func (s *Scraper) ScrapeConfig(ctx context.Context, config Config) (int, error) {
+	staticCount, err := s.UpsertLinks(config.Links)
+	if err != nil {
+		return staticCount, err
+	}
+
+	feedCount, err := s.Scrape(ctx, config.Feeds)
+	return staticCount + feedCount, err
+}
+
+func (s *Scraper) UpsertLinks(links []LinkConfig) (int, error) {
+	count := 0
+	for _, link := range links {
+		resource := models.Resource{
+			Title:       strings.TrimSpace(link.Title),
+			Link:        strings.TrimSpace(link.Link),
+			Summary:     strings.TrimSpace(link.Summary),
+			PublishedAt: link.PublishedAt.UTC(),
+			SourceName:  strings.TrimSpace(link.SourceName),
+			Tag:         strings.TrimSpace(link.Tag),
+			CreatedAt:   time.Now().UTC(),
+		}
+
+		if err := s.store.UpsertResource(resource); err != nil {
+			return count, err
+		}
+		count++
+	}
+
+	return count, nil
+}
+
 func (s *Scraper) scrapeFeed(ctx context.Context, feed FeedConfig) (int, error) {
 	parsedFeed, err := s.parser.ParseURLWithContext(feed.URL, ctx)
 	if err != nil {

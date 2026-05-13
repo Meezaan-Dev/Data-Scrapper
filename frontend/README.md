@@ -18,8 +18,11 @@ NEXT_PUBLIC_API_URL=http://localhost:8080 npm run dev
 Routes:
 
 - `/resources`
-- `/resources/react`
-- `/resources/nextjs`
-- `/resources/vercel`
-- `/resources/ai`
+- `/resources/frontend`
+- `/resources/ai-tools`
+- `/resources/llm`
+- `/resources/aws`
+- `/resources/mcp`
 - `/resources/tools`
+
+Tabs are loaded from the API's `/api/tags` endpoint so labels and routes stay aligned with `scraper-api/config.json`.

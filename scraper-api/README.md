@@ -5,8 +5,9 @@ Lightweight Go RSS/Atom scraper API for frontend ecosystem updates. It stores fe
 ## Endpoints
 
 - `GET /api/resources`
-- `GET /api/resources?tag=react`
-- `GET /api/resources?tag=nextjs&limit=10`
+- `GET /api/resources?tag=frontend`
+- `GET /api/resources?tag=llm&limit=10`
+- `GET /api/tags`
 - `POST /scrape`
 
 ## Local Development
@@ -21,6 +22,7 @@ In another terminal:
 ```bash
 curl -X POST http://localhost:8080/scrape
 curl http://localhost:8080/api/resources
+curl http://localhost:8080/api/tags
 ```
 
 ## CLI
@@ -45,16 +47,25 @@ docker run -p 8080:8080 -v ./data:/root/data frontend-scraper
 
 The container installs a cron job that runs every Monday at 09:00 and stores SQLite data at `/root/data/resources.db`.
 
-## Feed Config
+## Resource Config
 
-Feeds are configured in `config.json`:
+Resources are configured in `config.json`. The current format supports ordered tags, RSS/Atom feeds, and curated static official links:
 
 ```json
-[
-  {
-    "name": "React",
-    "url": "https://react.dev/feed.xml",
-    "tag": "react"
-  }
-]
+{
+  "tags": [{ "tag": "frontend", "label": "Frontend" }],
+  "feeds": [{ "name": "React", "url": "https://react.dev/feed.xml", "tag": "frontend" }],
+  "links": [
+    {
+      "title": "Cursor Changelog",
+      "link": "https://cursor.com/changelog",
+      "summary": "Official Cursor product updates and release notes.",
+      "source_name": "Cursor",
+      "tag": "ai-tools",
+      "published_at": "2026-05-13T00:00:00Z"
+    }
+  ]
+}
 ```
+
+The legacy array-only feed format is still accepted for compatibility.

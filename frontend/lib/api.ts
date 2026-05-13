@@ -9,7 +9,17 @@ export type Resource = {
   created_at: string;
 };
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080";
+export type ResourceTag = {
+  tag: string;
+  label: string;
+};
+
+export type ScrapeResponse = {
+  processed_items: number;
+  status: "ok";
+};
+
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080";
 
 export async function fetchResources(tag?: string, limit?: number): Promise<Resource[]> {
   const params = new URLSearchParams();
@@ -28,6 +38,29 @@ export async function fetchResources(tag?: string, limit?: number): Promise<Reso
 
   if (!res.ok) {
     throw new Error("Failed to fetch resources");
+  }
+
+  return res.json();
+}
+
+export async function fetchTags(): Promise<ResourceTag[]> {
+  const res = await fetch(`${API_BASE_URL}/api/tags`, { cache: "no-store" });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch resource tags");
+  }
+
+  return res.json();
+}
+
+export async function triggerScrape(): Promise<ScrapeResponse> {
+  const res = await fetch(`${API_BASE_URL}/scrape`, {
+    method: "POST",
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to trigger scrape");
   }
 
   return res.json();

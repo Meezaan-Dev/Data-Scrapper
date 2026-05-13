@@ -1,32 +1,178 @@
-[
-  {
-    "name": "React",
-    "url": "https://react.dev/feed.xml",
-    "tag": "react"
-  },
-  {
-    "name": "Next.js",
-    "url": "https://nextjs.org/feed.xml",
-    "tag": "nextjs"
-  },
-  {
-    "name": "Vercel",
-    "url": "https://vercel.com/atom",
-    "tag": "vercel"
-  },
-  {
-    "name": "React Releases",
-    "url": "https://github.com/facebook/react/releases.atom",
-    "tag": "react"
-  },
-  {
-    "name": "OpenAI",
-    "url": "https://openai.com/blog/rss.xml",
-    "tag": "ai"
-  },
-  {
-    "name": "GitHub Changelog",
-    "url": "https://github.blog/changelog/feed/",
-    "tag": "tools"
-  }
-]
+{
+  "tags": [
+    {
+      "tag": "frontend",
+      "label": "Frontend"
+    },
+    {
+      "tag": "ai-tools",
+      "label": "AI Tools"
+    },
+    {
+      "tag": "llm",
+      "label": "LLM Models"
+    },
+    {
+      "tag": "aws",
+      "label": "AWS"
+    },
+    {
+      "tag": "mcp",
+      "label": "MCP"
+    },
+    {
+      "tag": "tools",
+      "label": "Tools"
+    }
+  ],
+  "feeds": [
+    {
+      "name": "React",
+      "url": "https://react.dev/feed.xml",
+      "tag": "frontend"
+    },
+    {
+      "name": "Next.js",
+      "url": "https://nextjs.org/feed.xml",
+      "tag": "frontend"
+    },
+    {
+      "name": "Vercel",
+      "url": "https://vercel.com/atom",
+      "tag": "frontend"
+    },
+    {
+      "name": "TypeScript",
+      "url": "https://devblogs.microsoft.com/typescript/feed/",
+      "tag": "frontend"
+    },
+    {
+      "name": "Chrome Developers",
+      "url": "https://developer.chrome.com/blog/feed.xml",
+      "tag": "frontend"
+    },
+    {
+      "name": "GitHub Changelog",
+      "url": "https://github.blog/changelog/feed/",
+      "tag": "tools"
+    },
+    {
+      "name": "AWS Front-End Web & Mobile",
+      "url": "https://aws.amazon.com/blogs/mobile/feed/",
+      "tag": "aws"
+    },
+    {
+      "name": "AWS Machine Learning",
+      "url": "https://aws.amazon.com/blogs/machine-learning/feed/",
+      "tag": "aws"
+    },
+    {
+      "name": "OpenAI News",
+      "url": "https://openai.com/news/rss.xml",
+      "tag": "llm"
+    },
+    {
+      "name": "Model Context Protocol Blog",
+      "url": "https://blog.modelcontextprotocol.io/index.xml",
+      "tag": "mcp"
+    }
+  ],
+  "links": [
+    {
+      "title": "Cursor Changelog",
+      "link": "https://cursor.com/changelog",
+      "summary": "Official Cursor product updates and release notes for the AI coding editor.",
+      "source_name": "Cursor",
+      "tag": "ai-tools",
+      "published_at": "2026-05-13T00:00:00Z"
+    },
+    {
+      "title": "Cursor Docs",
+      "link": "https://docs.cursor.com/",
+      "summary": "Official Cursor documentation for editor workflows, agent features, models, rules, and integrations.",
+      "source_name": "Cursor",
+      "tag": "ai-tools",
+      "published_at": "2026-05-13T00:00:00Z"
+    },
+    {
+      "title": "GitHub Copilot Changelog",
+      "link": "https://github.blog/changelog/label/copilot/",
+      "summary": "Official GitHub changelog entries focused on Copilot product updates.",
+      "source_name": "GitHub Copilot",
+      "tag": "ai-tools",
+      "published_at": "2026-05-13T00:00:00Z"
+    },
+    {
+      "title": "GitHub Copilot Docs",
+      "link": "https://docs.github.com/en/copilot",
+      "summary": "Official documentation for GitHub Copilot, coding agents, enterprise controls, and IDE usage.",
+      "source_name": "GitHub Copilot",
+      "tag": "ai-tools",
+      "published_at": "2026-05-13T00:00:00Z"
+    },
+    {
+      "title": "OpenAI Platform Docs",
+      "link": "https://platform.openai.com/docs",
+      "summary": "Official OpenAI developer documentation for APIs, models, tools, and platform guides.",
+      "source_name": "OpenAI",
+      "tag": "llm",
+      "published_at": "2026-05-13T00:00:00Z"
+    },
+    {
+      "title": "OpenAI Model Docs",
+      "link": "https://platform.openai.com/docs/models",
+      "summary": "Official OpenAI model reference for available models, capabilities, and selection guidance.",
+      "source_name": "OpenAI",
+      "tag": "llm",
+      "published_at": "2026-05-13T00:00:00Z"
+    },
+    {
+      "title": "Claude Docs",
+      "link": "https://docs.anthropic.com/",
+      "summary": "Official Anthropic documentation for Claude models, APIs, tool use, and prompt engineering.",
+      "source_name": "Anthropic",
+      "tag": "llm",
+      "published_at": "2026-05-13T00:00:00Z"
+    },
+    {
+      "title": "Anthropic News",
+      "link": "https://www.anthropic.com/news",
+      "summary": "Official Anthropic announcements, product updates, research notes, and company news.",
+      "source_name": "Anthropic",
+      "tag": "llm",
+      "published_at": "2026-05-13T00:00:00Z"
+    },
+    {
+      "title": "AWS Amplify Docs",
+      "link": "https://docs.amplify.aws/",
+      "summary": "Official AWS Amplify documentation for full-stack web and mobile application development.",
+      "source_name": "AWS Amplify",
+      "tag": "aws",
+      "published_at": "2026-05-13T00:00:00Z"
+    },
+    {
+      "title": "Amazon Bedrock Docs",
+      "link": "https://docs.aws.amazon.com/bedrock/",
+      "summary": "Official Amazon Bedrock documentation for building generative AI applications on AWS.",
+      "source_name": "AWS",
+      "tag": "aws",
+      "published_at": "2026-05-13T00:00:00Z"
+    },
+    {
+      "title": "MCP Documentation",
+      "link": "https://modelcontextprotocol.io/docs",
+      "summary": "Official Model Context Protocol documentation for clients, servers, transports, and tools.",
+      "source_name": "Model Context Protocol",
+      "tag": "mcp",
+      "published_at": "2026-05-13T00:00:00Z"
+    },
+    {
+      "title": "MCP Specification",
+      "link": "https://modelcontextprotocol.io/specification",
+      "summary": "Official Model Context Protocol specification and protocol version reference.",
+      "source_name": "Model Context Protocol",
+      "tag": "mcp",
+      "published_at": "2026-05-13T00:00:00Z"
+    }
+  ]
+}

@@ -1,18 +1,24 @@
 import Link from "next/link";
 
+import type { ResourceTag } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
-const tabs = [
-  { label: "All", href: "/resources", tag: undefined },
-  { label: "React", href: "/resources/react", tag: "react" },
-  { label: "Next.js", href: "/resources/nextjs", tag: "nextjs" },
-  { label: "Vercel", href: "/resources/vercel", tag: "vercel" },
-  { label: "AI", href: "/resources/ai", tag: "ai" },
-  { label: "npm/tools", href: "/resources/tools", tag: "tools" },
-];
+export function ResourceTabs({
+  activeTag,
+  tags,
+}: {
+  activeTag?: string;
+  tags: ResourceTag[];
+}) {
+  const tabs = [
+    { label: "All", href: "/resources", tag: undefined },
+    ...tags.map((tag) => ({
+      label: tag.label,
+      href: `/resources/${tag.tag}`,
+      tag: tag.tag,
+    })),
+  ];
 
-// These tags intentionally mirror scraper-api/config.json.
-export function ResourceTabs({ activeTag }: { activeTag?: string }) {
   return (
     <nav
       aria-label="Resource filters"

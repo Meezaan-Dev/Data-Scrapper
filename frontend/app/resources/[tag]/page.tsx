@@ -1,15 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { ResourcesView } from "@/components/ResourcesView";
-import { fetchResources } from "@/lib/api";
-
-const labels: Record<string, string> = {
-  react: "React",
-  nextjs: "Next.js",
-  vercel: "Vercel",
-  ai: "AI",
-  tools: "npm/tools",
-};
+import { fetchResources, fetchTags } from "@/lib/api";
 
 export default async function TaggedResourcesPage({
   params,
@@ -17,20 +9,25 @@ export default async function TaggedResourcesPage({
   params: Promise<{ tag: string }>;
 }) {
   const { tag } = await params;
+  const tagsPromise = fetchTags();
+  const resourcesPromise = fetchResources(tag);
+  const tags = await tagsPromise;
+  const activeTag = tags.find((candidate) => candidate.tag === tag);
 
-  if (!labels[tag]) {
+  if (!activeTag) {
     notFound();
   }
 
-  const resources = await fetchResources(tag);
+  const resources = await resourcesPromise;
 
   return (
     <ResourcesView
       activeTag={tag}
-      emptyLabel={`${labels[tag]} resources`}
+      emptyLabel={`${activeTag.label} resources`}
       resources={resources}
-      subtitle={`Focused updates for ${labels[tag]} from the shared feed list.`}
-      title={labels[tag]}
+      subtitle={`Focused updates and references for ${activeTag.label} from the shared resource list.`}
+      tags={tags}
+      title={activeTag.label}
     />
   );
 }
