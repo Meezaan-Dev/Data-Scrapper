@@ -33,7 +33,7 @@ services:
       api:
         condition: service_healthy
     ports:
-      - "3000:3000"
+      - "2405:2405"
     restart: unless-stopped
 
 volumes:

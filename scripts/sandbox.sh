@@ -173,7 +173,7 @@ cat <<'EOF'
 Sandbox is starting.
 
 Open:
-  http://localhost:3000/resources
+  http://localhost:2405/resources
 
 Useful commands:
   make logs

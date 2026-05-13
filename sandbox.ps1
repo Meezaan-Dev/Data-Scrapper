@@ -94,7 +94,7 @@ Write-Host @"
 Sandbox is starting.
 
 Open:
-  http://localhost:3000/resources
+  http://localhost:2405/resources
 
 Useful commands:
   docker compose logs -f

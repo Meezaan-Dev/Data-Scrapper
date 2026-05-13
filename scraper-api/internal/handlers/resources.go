@@ -42,11 +42,22 @@ func (h *Handler) ListResources(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, resources)
 }
 
-func (h *Handler) Scrape(w http.ResponseWriter, r *http.Request) {
-	feeds, err := scraper.LoadFeeds(h.configPath)
+func (h *Handler) ListTags(w http.ResponseWriter, r *http.Request) {
+	config, err := scraper.LoadConfig(h.configPath)
 	if err != nil {
-		log.Printf("load feeds failed: %v", err)
-		writeError(w, http.StatusInternalServerError, "failed to load feed config")
+		log.Printf("load config failed: %v", err)
+		writeError(w, http.StatusInternalServerError, "failed to load resource config")
+		return
+	}
+
+	writeJSON(w, http.StatusOK, config.Tags)
+}
+
+func (h *Handler) Scrape(w http.ResponseWriter, r *http.Request) {
+	config, err := scraper.LoadConfig(h.configPath)
+	if err != nil {
+		log.Printf("load config failed: %v", err)
+		writeError(w, http.StatusInternalServerError, "failed to load resource config")
 		return
 	}
 
@@ -54,7 +65,7 @@ func (h *Handler) Scrape(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithTimeout(r.Context(), 2*time.Minute)
 	defer cancel()
 
-	count, err := scraper.New(h.store).Scrape(ctx, feeds)
+	count, err := scraper.New(h.store).ScrapeConfig(ctx, config)
 	if err != nil {
 		log.Printf("scrape failed: %v", err)
 		writeError(w, http.StatusInternalServerError, "failed to scrape feeds")

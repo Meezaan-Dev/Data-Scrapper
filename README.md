@@ -28,8 +28,9 @@ sandbox.cmd
 
 Open:
 
-- Frontend: http://localhost:3000
+- Frontend: http://localhost:2405
 - API: http://localhost:8080/api/resources
+- Tags: http://localhost:8080/api/tags
 
 If you prefer raw Docker Compose:
 
@@ -103,7 +104,20 @@ make reset
 
 ## Services
 
-- `api`: Go, `net/http`, RSS/Atom scraping, SQLite, weekly cron scrape.
+- `api`: Go, `net/http`, RSS/Atom scraping, curated static resource links, SQLite, weekly cron scrape.
 - `frontend`: Next.js viewer pointed at `http://api:8080` inside the Docker network.
 
 The app is intentionally local-first and has no auth.
+
+## Resource Categories
+
+The default resource set is official-first and focused on:
+
+- Frontend engineering
+- AI coding tools
+- LLM models and platform docs
+- AWS web, mobile, and AI development
+- Model Context Protocol
+- Developer tools
+
+RSS and Atom sources plus curated official links are configured in `scraper-api/config.json`.

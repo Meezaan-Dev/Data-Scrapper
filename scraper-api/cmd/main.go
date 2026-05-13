@@ -58,6 +58,7 @@ func serve(dbPath, configPath string) error {
 	handler := handlers.New(store, configPath)
 	router := mux.NewRouter()
 	router.HandleFunc("/api/resources", handler.ListResources).Methods(http.MethodGet, http.MethodOptions)
+	router.HandleFunc("/api/tags", handler.ListTags).Methods(http.MethodGet, http.MethodOptions)
 	router.HandleFunc("/scrape", handler.Scrape).Methods(http.MethodPost, http.MethodOptions)
 
 	addr := envOrDefault("ADDR", defaultAddr)
@@ -79,7 +80,7 @@ func runScrape(dbPath, configPath string) error {
 	}
 	defer store.Close()
 
-	feeds, err := scraper.LoadFeeds(configPath)
+	config, err := scraper.LoadConfig(configPath)
 	if err != nil {
 		return err
 	}
@@ -87,7 +88,7 @@ func runScrape(dbPath, configPath string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 	defer cancel()
 
-	count, err := scraper.New(store).Scrape(ctx, feeds)
+	count, err := scraper.New(store).ScrapeConfig(ctx, config)
 	if err != nil {
 		return err
 	}
